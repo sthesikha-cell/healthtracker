@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Food the user ate at a specific time of day
+model FoodEntry {
+  id        String   @id @default(cuid())
+  date      String // YYYY-MM-DD
+  name      String
+  mealType  String // breakfast | lunch | dinner | snack
+  time      String // HH:MM
+  calories  Int
+  createdAt DateTime @default(now())
+}
+
+// Daily walk entry (steps, duration, distance)
+model WalkEntry {
+  id         String   @id @default(cuid())
+  date       String // YYYY-MM-DD
+  steps      Int
+  minutes    Int
+  distanceKm Float
+  createdAt  DateTime @default(now())
+}
+
+// Other exercises/activities done during the day
+model ActivityEntry {
+  id             String   @id @default(cuid())
+  date           String // YYYY-MM-DD
+  name           String
+  minutes        Int
+  caloriesBurned Int
+  createdAt      DateTime @default(now())
+}
