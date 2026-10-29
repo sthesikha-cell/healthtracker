@@ -26,10 +26,15 @@ export async function POST(request: NextRequest) {
 
     const stepsNum = Number(steps)
     const minutesNum = Number(minutes ?? 0)
-    const distanceNum = Number(distanceKm ?? 0)
+    let distanceNum = Number(distanceKm ?? 0)
 
     if (!Number.isFinite(stepsNum) || stepsNum < 0) {
       return NextResponse.json({ error: 'steps must be a non-negative number' }, { status: 400 })
+    }
+
+    // Auto-estimate distance from steps (~0.76 m stride) when not provided
+    if (!distanceNum || distanceNum <= 0) {
+      distanceNum = Math.round(stepsNum * 0.000762 * 10) / 10
     }
 
     const walk = await db.walkEntry.create({
